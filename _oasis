@@ -1,0 +1,92 @@
+OASISFormat:      0.3
+OCamlVersion:     >= 4.00.1
+FindlibVersion:   >= 1.3.2
+Name:             async_parallel
+Version:          109.23.00
+Synopsis:         Distributed computing library
+Authors:          Jane Street Capital LLC <opensource@janestreet.com>
+Copyrights:       (C) 2013 Jane Street Capital LLC <opensource@janestreet.com>
+Maintainers:      Jane Street Capital LLC <opensource@janestreet.com>
+License:          Apache-2.0
+LicenseFile:      LICENSE.txt
+Homepage:         https://github.com/janestreet/async_parallel
+Plugins:          StdFiles (0.3), DevFiles (0.3), META (0.3)
+XStdFilesAUTHORS: false
+XStdFilesREADME:  false
+BuildTools:       ocamlbuild, camlp4o
+Description:
+  Parallel is a library for running tasks in other processes on a
+  cluster of machines.
+
+Library parallel
+  Path:               lib
+  Pack:               true
+  Modules:            Channel,
+                      Hub,
+                      Import,
+                      Intf,
+                      Master_process,
+                      Std,
+                      Token,
+                      Worker_process
+  BuildDepends:       async (>= 109.21.00),
+                      bin_prot (>= 109.15.00),
+                      bin_prot.syntax,
+                      core (>= 109.23.00),
+                      sexplib (>= 109.20.00),
+                      sexplib.syntax,
+                      threads
+  XMETARequires:      async,
+                      bin_prot,
+                      core,
+                      sexplib,
+                      threads
+
+Executable deep
+  Path:               examples
+  MainIs:             deep.ml
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       parallel
+
+Executable echo_server
+  Path:               examples
+  MainIs:             echo_server.ml
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       parallel
+
+Executable pingpong
+  Path:               examples
+  MainIs:             pingpong.ml
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       parallel
+
+Executable ring
+  Path:               examples
+  MainIs:             ring.ml
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       parallel
+
+Executable simple
+  Path:               examples
+  MainIs:             simple.ml
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       parallel
+
+Executable wide
+  Path:               examples
+  MainIs:             wide.ml
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       parallel
+
+Document "parallel"
+  Title:                Distributed computing library
+  Type:                 ocamlbuild (0.3)
+  BuildTools+:          ocamldoc
+  XOCamlbuildPath:      lib
+  XOCamlbuildLibraries: parallel
