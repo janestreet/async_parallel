@@ -197,6 +197,8 @@ let run listener : never_returns =
      up select whenever we want by writing to the pipe. This is the buffer that holds the
      wakeup events. It's 50 bytes long, because we write a wakeup event for every time we
      get sigchld, and when we read we want to get all the wakeup events at once. *)
+  (* These settings will cause us to shrink the heap to nearly the actual live data size
+     when we compact. The smaller the heap the faster fork runs *)
   let wakeup_len = 50 in
   let wakeup_buf = String.create wakeup_len in
   let (wakeup_r, wakeup_w) = U.pipe () in

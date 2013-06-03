@@ -119,12 +119,13 @@
     Some things to avoid marshaling
     -------------------------------
 
-    Monitor.t, Pcre.regexp, Writer.t, Reader.t, and
-    similar kinds of objects shouldn't be depended upon to marshal correctly. Pcre.regexp
-    is just right out, it definitly won't work. Monitor.t, Writer.t, and Reader.t, because
-    of their complex nature, generally tow the entire async scheduler along with them, and
-    because of that they will fail if any job on the scheduler queue has a custom object
-    (e.g. regexp, or other C object) that can't be marshaled.
+    Monitor.t, Pcre.regexp, Writer.t, Reader.t, and similar kinds of objects shouldn't be
+    depended upon to marshal correctly. Pcre.regexp is just right out, it definitly won't
+    work. Monitor.t, Writer.t, and Reader.t, because of their complex nature, generally
+    tow the entire async scheduler along with them, and because of that they will fail if
+    any job on the scheduler queue has a custom object (e.g. regexp, or other C object)
+    that can't be marshaled. You also can't marshal functions you've dynamically loaded
+    (e.g. with ocaml plugin).
 
     Processes don't share memory
     ----------------------------

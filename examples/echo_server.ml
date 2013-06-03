@@ -84,7 +84,7 @@ let () =
        master_machine = master;
        (* Though not exactly recommended this is an example of how flexible the
           new library is. *)
-       worker_machines = ["hkg-qws-r01"; "ldn-qws-r01"; "tot-qws-r01"]}
+       worker_machines = []}
       ();
     p "calling main";
     main ();
