@@ -98,17 +98,17 @@ module Signals = struct
   let handle ~onexit ~onchld =
     let exit_sigs = [S.hup; S.int; S.quit; S.term] in
     List.iter exit_sigs ~f:(fun s ->
-      let existing_behavior = S.signal s (`Handle onexit) in
+      let existing_behavior = S.Expert.signal s (`Handle onexit) in
       (* allow the user to ignore some (or all) exit signals. *)
-      if existing_behavior = `Ignore then S.set s `Ignore
+      if existing_behavior = `Ignore then S.ignore s
       else existing := (s, existing_behavior) :: !existing);
-    let existing_chld = S.signal S.chld (`Handle onchld) in
+    let existing_chld = S.Expert.signal S.chld (`Handle onchld) in
     existing := (S.chld, existing_chld) :: !existing;
-    let existing_pipe = S.signal S.pipe `Ignore in
+    let existing_pipe = S.Expert.signal S.pipe `Ignore in
     existing := (S.pipe, existing_pipe) :: !existing;
   ;;
 
-  let restore () = List.iter !existing ~f:(fun (s, b) -> S.set s b)
+  let restore () = List.iter !existing ~f:(fun (s, b) -> S.Expert.set s b)
 end
 
 (* This table contains all machines master process addresses *)
@@ -153,12 +153,12 @@ let talk_machine ip port talk =
   let close () = try syscall (fun () -> U.close s) with _ -> () in
   try
     U.setsockopt s U.TCP_NODELAY true;
-    let prev = Signal.signal Signal.alrm (`Handle (fun _ -> close ())) in
+    let prev = Signal.Expert.signal Signal.alrm (`Handle (fun _ -> close ())) in
     ignore (U.alarm 60);
     syscall (fun () -> U.connect s ~addr:(U.ADDR_INET (ip, port)));
     let res = talk s in
     ignore (U.alarm 0);
-    Signal.set Signal.alrm prev;
+    Signal.Expert.set Signal.alrm prev;
     close ();
     res
   with exn -> close (); Error exn
