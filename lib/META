@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: 5709791165e0ff533a6e479c388e7948)
+version = "109.30.00"
+description = "Distributed computing library"
+requires = "async bin_prot core sexplib threads"
+archive(byte) = "parallel.cma"
+archive(byte, plugin) = "parallel.cma"
+archive(native) = "parallel.cmxa"
+archive(native, plugin) = "parallel.cmxs"
+exists_if = "parallel.cma"
+# OASIS_STOP
+
