@@ -466,7 +466,7 @@ let init ?cluster () =
   else begin
     let (listening_socket, addr) = listener () in
     begin match cluster with
-    | None | Some {Cluster.worker_machines = []; _} ->
+    | None ->
       local_name := Some "local";
       Hashtbl.replace (Lazy.force machines) ~key:(Option.value_exn !local_name)
         ~data:addr;
