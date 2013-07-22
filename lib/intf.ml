@@ -46,7 +46,7 @@ let spawn (type a) (type b) (type c)
     let close c =
       don't_wait_for (Monitor.try_with (fun () -> C.close c) >>| ignore)
     in
-    C.write control_channel (Worker_process.To_worker.Run f);
+    C.write control_channel (Worker_process.To_worker.Run (buffer_age_limit, f));
     C.flushed control_channel
     >>| fun () ->
     let res =
@@ -66,7 +66,7 @@ let run ?buffer_age_limit ?where f =
 ;;
 
 let st = lazy (Random.State.make_self_init ())
-let hub () =
+let hub ?buffer_age_limit () =
   let rec pick_port port =
     let s = Socket.create Socket.Type.tcp in
     Monitor.try_with (fun () ->
@@ -81,7 +81,7 @@ let hub () =
       | exn -> raise exn
   in
   pick_port 10000 >>= fun s ->
-  Hub.create (Socket.listen s)
+  Hub.create ?buffer_age_limit (Socket.listen s)
 ;;
 
 let is_worker_machine () = Core.Std.Sys.getenv "ASYNC_PARALLEL_IS_CHILD_MACHINE" <> None

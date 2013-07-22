@@ -76,13 +76,15 @@ val run
     spawn.
 *)
 val spawn
-   : ?buffer_age_limit:[ `At_most of Core.Std.Time.Span.t | `Unlimited ]
+   : ?buffer_age_limit:Writer.buffer_age_limit
   -> ?where:[`Local | `On of string | `F of (unit -> string)]
   -> (('a, 'b) Hub.t -> 'c Deferred.t)
   -> (('a, 'b) Channel.t * ('c, string) Result.t Deferred.t) Deferred.t
 
 (** create a new hub. *)
-val hub : unit -> (_, _) Hub.t Deferred.t
+val hub : ?buffer_age_limit:Writer.buffer_age_limit
+  -> unit
+  -> (_, _) Hub.t Deferred.t
 
 (** returns true if this is a worker machine. See the notes on running on multiple
     machines in Std.ml. *)

@@ -5,6 +5,7 @@ module Client_id : sig
   type t with sexp
 
   include Comparable with type t := t
+  include Hashable with type t := t
 
   val zero : t
   val succ : t -> t
@@ -34,6 +35,7 @@ type ('a, 'b) t =
     socket: ([`Passive], Socket.Address.Inet.t) Socket.t;
     addr : Unix.Inet_addr.t * int;
     token: Token.t;
+    buffer_age_limit: Writer.buffer_age_limit option;
   }
 
 exception Hubs_are_not_portable_between_processes
@@ -46,7 +48,7 @@ let close t =
     Ivar.read t.is_shutdown
   end
 
-let create socket =
+let create ?buffer_age_limit socket =
   let `Inet (ip, port) = Socket.getsockname socket in
   let (pipe_r, pipe_w) = Pipe.create () in
   return
@@ -59,6 +61,7 @@ let create socket =
       clients = Hashtbl.Poly.create () ~size:1;
       socket;
       addr = (ip, port);
+      buffer_age_limit;
       token = Token.mine; }
 ;;
 
@@ -112,7 +115,8 @@ let listener t =
         t.next_client <- Client_id.succ id;
         id
       in
-      let conn = { writer = Writer.create fd; reader = Reader.create fd } in
+      let conn = { writer = Writer.create ?buffer_age_limit:t.buffer_age_limit fd;
+                   reader = Reader.create fd } in
       let closed = Ivar.create () in
       let close =
         let error = ref "" in

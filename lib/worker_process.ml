@@ -4,7 +4,7 @@ open Import
 
 module To_worker = struct
   type ('a, 'b, 'c) t =
-  | Run of (('a, 'b) Hub.t -> 'c Deferred.t)
+  | Run of Writer.buffer_age_limit option * (('a, 'b) Hub.t -> 'c Deferred.t)
 end
 
 module From_worker = struct
@@ -36,9 +36,9 @@ let go (type a) (type b) (type c) ~control_socket =
       | `Ok x ->
         if debug then dbp "worker process read request";
         match (Marshal.from_string x 0 : (a, b, c) To_worker.t) with
-        | To_worker.Run f ->
+        | To_worker.Run (buffer_age_limit, f) ->
           if debug then dbp "got run request, creating hub";
-          Hub.create control_socket
+          Hub.create ?buffer_age_limit control_socket
           >>> fun hub ->
           if debug then dbp "running f";
           (Monitor.try_with (fun () -> f hub)

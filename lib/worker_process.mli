@@ -16,7 +16,7 @@ open Async.Std
 
 module To_worker : sig
   type ('a, 'b, 'c) t =
-  | Run of (('a, 'b) Hub.t -> 'c Deferred.t)
+  | Run of Writer.buffer_age_limit option * (('a, 'b) Hub.t -> 'c Deferred.t)
 end
 
 module From_worker : sig

@@ -13,11 +13,14 @@ open Import
 module Client_id : sig
   type t with sexp
   include Comparable with type t := t
+  include Hashable with type t := t
 end
 
 type ('from_client, 'to_client) t
 
-val create : ([`Passive], Socket.Address.Inet.t) Socket.t -> (_, _) t Deferred.t
+val create : ?buffer_age_limit:Writer.buffer_age_limit
+  -> ([`Passive], Socket.Address.Inet.t) Socket.t
+  -> (_, _) t Deferred.t
 
 (* Note, this will close the listening socket as well as all connected clients. *)
 val close : (_, _) t -> unit Deferred.t
