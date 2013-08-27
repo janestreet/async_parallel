@@ -200,8 +200,10 @@ let close t =
       begin match Hashtbl.find reified r with
       | None -> ()
       | Some r ->
-        ignore (Monitor.try_with (fun () -> Writer.close r.writer));
-        ignore (Monitor.try_with (fun () -> Reader.close r.reader))
+        ignore (Monitor.try_with (fun () ->
+          Writer.close r.writer
+          >>= fun () ->
+          Reader.close r.reader))
       end;
       Hashtbl.remove reified r;
       return ()
