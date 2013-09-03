@@ -1,6 +1,6 @@
 open Core.Std
 open Async.Std
-open Parallel.Std
+open Async_parallel.Std
 
 let p s = Printf.printf "%s: %s\n%!" (Pid.to_string (Unix.getpid ())) s
 
