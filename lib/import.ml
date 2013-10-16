@@ -19,18 +19,19 @@ let dbp msg =
   Out_channel.newline oc;
   Out_channel.flush oc
 
-exception Cant_determine_our_ip_address
 let my_ip = lazy begin
-  match U.Host.getbyname (U.gethostname ()) with
-  | None -> raise Cant_determine_our_ip_address
-  | Some host ->
-    let addrs =
-      Array.filter host.U.Host.addresses ~f:(fun a -> a <> U.Inet_addr.localhost)
-    in
-    if Array.length addrs = 0 then
-      raise Cant_determine_our_ip_address
-    else
-      addrs.(0)
+  try
+    (match U.Host.getbyname (U.gethostname ()) with
+    | None -> U.Inet_addr.localhost
+    | Some host ->
+      let addrs =
+        Array.filter host.U.Host.addresses ~f:(fun a -> a <> U.Inet_addr.localhost)
+      in
+      if Array.length addrs = 0 then
+        U.Inet_addr.localhost
+      else
+        addrs.(0))
+  with _ -> U.Inet_addr.localhost
 end
 
 module Cluster = struct
