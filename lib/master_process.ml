@@ -387,7 +387,14 @@ module Worker_machines = struct
   ;;
 
   (* All hail the great designers of the unix shell and operating system. *)
-  let cmd bin_name cwd local_name = sprintf "(
+  let cmd bin_name cwd local_name =
+    let async_config_set_var =
+      let var = Async.Std.Async_config.environment_variable in
+      match Sys.getenv var with
+      | None -> ""
+      | Some value -> sprintf "%s=%S" var value
+    in
+    sprintf "(
 US=$(mktemp -d)
 EXE=${US}/%s
 # the master machine is going to send then binary across stdin, and
@@ -395,10 +402,11 @@ EXE=${US}/%s
 # we don't need stdin anyway, so it's fine if it gets closed.
 cat >\"$EXE\"
 chmod 700 \"$EXE\"
+%s \\
 ASYNC_PARALLEL_MASTER_CWD=\"%s\" \\
 ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
 \"$EXE\" </dev/null || rm -rf $US
-)" bin_name cwd local_name
+)" bin_name async_config_set_var cwd local_name
 
   (* We assume our own binary is not replaced during initialization. Sadly this is the
      best we can do, as unix provides no way to access the file of an unlinked program
