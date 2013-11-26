@@ -90,30 +90,34 @@ let rec rereify t =
         incr next_id;
         t.state <- `Reified id;
         Hashtbl.replace reified ~key:id ~data:r;
-        Queue.iter q ~f:(fun v -> write_bigstring t v))
+        Queue.iter q ~f:(fun v -> write_bigstring ~can_destroy:false t v))
   in
   t.state <- `Reifying (q, r);
   r
 
-and write_bigstring t v =
+and write_bigstring ~can_destroy t v =
   match t.state with
   | `Dead exn -> on_error t exn
   | _ ->
     if not (Token.valid t.token) then begin
       let _ = rereify t in
-      write_bigstring t v
+      write_bigstring ~can_destroy t v
     end else begin
       match t.state with
       | `Unconnected ->
         don't_wait_for (rereify t);
         (* Calling [write_bigstring] isn't an infinite loop, because [rereify] changes the
            state of [t] to [`Reifying]. *)
-        write_bigstring t v;
+        write_bigstring ~can_destroy t v;
       | `Reified r ->
         begin match Hashtbl.find reified r with
         | None -> assert false
         | Some r ->
-          try Writer.schedule_bigstring r.writer v
+          try
+            Writer.schedule_bigstring r.writer v;
+            if can_destroy
+            then (Writer.flushed r.writer >>> fun () -> Bigstring.unsafe_destroy v)
+            else ()
           with exn -> on_error t exn
         end
       | `Reifying (q, _) -> Queue.enqueue q v
@@ -153,11 +157,11 @@ let pre_pack v =
     raise e
 ;;
 
-let write_pre_packed t v = write_bigstring t v
+let write_pre_packed t v = write_bigstring ~can_destroy:false t v
 
 let write t v =
   let bs = Bigstring_marshal.marshal ~flags:[Marshal.Closures] v in
-  write_bigstring t bs
+  write_bigstring ~can_destroy:true t bs
 
 let check_not_dead t =
   match t.state with
