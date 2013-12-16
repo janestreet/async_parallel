@@ -1,6 +1,6 @@
 # OASIS_START
-# DO NOT EDIT (digest: a92b40a7f76a14d963c0e19d7e4c1baf)
-version = "109.53.01"
+# DO NOT EDIT (digest: 2fc0f2d980ad0865d81fc149a447bfc5)
+version = "109.53.02"
 description = "Distributed computing library"
 requires = "async bin_prot core sexplib threads"
 archive(byte) = "async_parallel.cma"
