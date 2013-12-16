@@ -1,7 +1,7 @@
 # OASIS_START
-# DO NOT EDIT (digest: 9e6dc59d387e15b384ae12cd8093d173)
-# Ignore VCS directories, you can use the same kind of rule outside 
-# OASIS_START/STOP if you want to exclude directories that contains 
+# DO NOT EDIT (digest: 339cc082f30691c6c4de3eb848a6a86c)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
 <**/.svn>: -traverse
 <**/.svn>: not_hygienic
@@ -23,74 +23,74 @@
 "lib/std.cmx": for-pack(Async_parallel)
 "lib/token.cmx": for-pack(Async_parallel)
 "lib/worker_process.cmx": for-pack(Async_parallel)
-<lib/*.ml{,i}>: pkg_async
-<lib/*.ml{,i}>: pkg_bin_prot
-<lib/*.ml{,i}>: pkg_bin_prot.syntax
-<lib/*.ml{,i}>: pkg_core
-<lib/*.ml{,i}>: pkg_sexplib
-<lib/*.ml{,i}>: pkg_sexplib.syntax
-<lib/*.ml{,i}>: pkg_threads
+<lib/*.ml{,i}>: package(async)
+<lib/*.ml{,i}>: package(bin_prot)
+<lib/*.ml{,i}>: package(bin_prot.syntax)
+<lib/*.ml{,i}>: package(core)
+<lib/*.ml{,i}>: package(sexplib)
+<lib/*.ml{,i}>: package(sexplib.syntax)
+<lib/*.ml{,i}>: package(threads)
 # Executable deep
 <examples/deep.{native,byte}>: use_async_parallel
-<examples/deep.{native,byte}>: pkg_async
-<examples/deep.{native,byte}>: pkg_bin_prot
-<examples/deep.{native,byte}>: pkg_bin_prot.syntax
-<examples/deep.{native,byte}>: pkg_core
-<examples/deep.{native,byte}>: pkg_sexplib
-<examples/deep.{native,byte}>: pkg_sexplib.syntax
-<examples/deep.{native,byte}>: pkg_threads
+<examples/deep.{native,byte}>: package(async)
+<examples/deep.{native,byte}>: package(bin_prot)
+<examples/deep.{native,byte}>: package(bin_prot.syntax)
+<examples/deep.{native,byte}>: package(core)
+<examples/deep.{native,byte}>: package(sexplib)
+<examples/deep.{native,byte}>: package(sexplib.syntax)
+<examples/deep.{native,byte}>: package(threads)
 # Executable echo_server
 <examples/echo_server.{native,byte}>: use_async_parallel
-<examples/echo_server.{native,byte}>: pkg_async
-<examples/echo_server.{native,byte}>: pkg_bin_prot
-<examples/echo_server.{native,byte}>: pkg_bin_prot.syntax
-<examples/echo_server.{native,byte}>: pkg_core
-<examples/echo_server.{native,byte}>: pkg_sexplib
-<examples/echo_server.{native,byte}>: pkg_sexplib.syntax
-<examples/echo_server.{native,byte}>: pkg_threads
+<examples/echo_server.{native,byte}>: package(async)
+<examples/echo_server.{native,byte}>: package(bin_prot)
+<examples/echo_server.{native,byte}>: package(bin_prot.syntax)
+<examples/echo_server.{native,byte}>: package(core)
+<examples/echo_server.{native,byte}>: package(sexplib)
+<examples/echo_server.{native,byte}>: package(sexplib.syntax)
+<examples/echo_server.{native,byte}>: package(threads)
 # Executable pingpong
 <examples/pingpong.{native,byte}>: use_async_parallel
-<examples/pingpong.{native,byte}>: pkg_async
-<examples/pingpong.{native,byte}>: pkg_bin_prot
-<examples/pingpong.{native,byte}>: pkg_bin_prot.syntax
-<examples/pingpong.{native,byte}>: pkg_core
-<examples/pingpong.{native,byte}>: pkg_sexplib
-<examples/pingpong.{native,byte}>: pkg_sexplib.syntax
-<examples/pingpong.{native,byte}>: pkg_threads
+<examples/pingpong.{native,byte}>: package(async)
+<examples/pingpong.{native,byte}>: package(bin_prot)
+<examples/pingpong.{native,byte}>: package(bin_prot.syntax)
+<examples/pingpong.{native,byte}>: package(core)
+<examples/pingpong.{native,byte}>: package(sexplib)
+<examples/pingpong.{native,byte}>: package(sexplib.syntax)
+<examples/pingpong.{native,byte}>: package(threads)
 # Executable ring
 <examples/ring.{native,byte}>: use_async_parallel
-<examples/ring.{native,byte}>: pkg_async
-<examples/ring.{native,byte}>: pkg_bin_prot
-<examples/ring.{native,byte}>: pkg_bin_prot.syntax
-<examples/ring.{native,byte}>: pkg_core
-<examples/ring.{native,byte}>: pkg_sexplib
-<examples/ring.{native,byte}>: pkg_sexplib.syntax
-<examples/ring.{native,byte}>: pkg_threads
+<examples/ring.{native,byte}>: package(async)
+<examples/ring.{native,byte}>: package(bin_prot)
+<examples/ring.{native,byte}>: package(bin_prot.syntax)
+<examples/ring.{native,byte}>: package(core)
+<examples/ring.{native,byte}>: package(sexplib)
+<examples/ring.{native,byte}>: package(sexplib.syntax)
+<examples/ring.{native,byte}>: package(threads)
 # Executable simple
 <examples/simple.{native,byte}>: use_async_parallel
-<examples/simple.{native,byte}>: pkg_async
-<examples/simple.{native,byte}>: pkg_bin_prot
-<examples/simple.{native,byte}>: pkg_bin_prot.syntax
-<examples/simple.{native,byte}>: pkg_core
-<examples/simple.{native,byte}>: pkg_sexplib
-<examples/simple.{native,byte}>: pkg_sexplib.syntax
-<examples/simple.{native,byte}>: pkg_threads
+<examples/simple.{native,byte}>: package(async)
+<examples/simple.{native,byte}>: package(bin_prot)
+<examples/simple.{native,byte}>: package(bin_prot.syntax)
+<examples/simple.{native,byte}>: package(core)
+<examples/simple.{native,byte}>: package(sexplib)
+<examples/simple.{native,byte}>: package(sexplib.syntax)
+<examples/simple.{native,byte}>: package(threads)
 # Executable wide
 <examples/wide.{native,byte}>: use_async_parallel
-<examples/wide.{native,byte}>: pkg_async
-<examples/wide.{native,byte}>: pkg_bin_prot
-<examples/wide.{native,byte}>: pkg_bin_prot.syntax
-<examples/wide.{native,byte}>: pkg_core
-<examples/wide.{native,byte}>: pkg_sexplib
-<examples/wide.{native,byte}>: pkg_sexplib.syntax
-<examples/wide.{native,byte}>: pkg_threads
+<examples/wide.{native,byte}>: package(async)
+<examples/wide.{native,byte}>: package(bin_prot)
+<examples/wide.{native,byte}>: package(bin_prot.syntax)
+<examples/wide.{native,byte}>: package(core)
+<examples/wide.{native,byte}>: package(sexplib)
+<examples/wide.{native,byte}>: package(sexplib.syntax)
+<examples/wide.{native,byte}>: package(threads)
 <examples/*.ml{,i}>: use_async_parallel
-<examples/*.ml{,i}>: pkg_async
-<examples/*.ml{,i}>: pkg_bin_prot
-<examples/*.ml{,i}>: pkg_bin_prot.syntax
-<examples/*.ml{,i}>: pkg_core
-<examples/*.ml{,i}>: pkg_sexplib
-<examples/*.ml{,i}>: pkg_sexplib.syntax
-<examples/*.ml{,i}>: pkg_threads
+<examples/*.ml{,i}>: package(async)
+<examples/*.ml{,i}>: package(bin_prot)
+<examples/*.ml{,i}>: package(bin_prot.syntax)
+<examples/*.ml{,i}>: package(core)
+<examples/*.ml{,i}>: package(sexplib)
+<examples/*.ml{,i}>: package(sexplib.syntax)
+<examples/*.ml{,i}>: package(threads)
 # OASIS_STOP
 <lib{,_test}/*.ml{,i}>     : syntax_camlp4o

@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: c481bf09ae28492cf3e9d3e5400c7eb6) *)
+(* DO NOT EDIT (digest: 066d7894f4499ae38f01110cb697b380) *)
 This is the INSTALL file for the async_parallel distribution.
 
 This package uses OASIS to generate its build system. See section OASIS for
@@ -27,7 +27,7 @@ Installing
 Uninstalling
 ============
 
-1. Go to the root of the package 
+1. Go to the root of the package
 2. Run 'ocaml setup.ml -uninstall'
 
 OASIS
