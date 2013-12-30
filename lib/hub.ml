@@ -1,5 +1,6 @@
 open Core.Std
 open Async.Std
+open Import
 
 module Client_id : sig
   type t with sexp
@@ -10,8 +11,6 @@ module Client_id : sig
   val zero : t
   val succ : t -> t
 end = Int
-
-module Socket = Socket
 
 type con = {
   reader: Reader.t;
@@ -49,7 +48,8 @@ let close t =
   end
 
 let create ?buffer_age_limit socket =
-  let `Inet (ip, port) = Socket.getsockname socket in
+  let ip = Lazy.force my_ip in
+  let `Inet (_, port) = Socket.getsockname socket in
   let (pipe_r, pipe_w) = Pipe.create () in
   return
     { next_client = Client_id.zero;

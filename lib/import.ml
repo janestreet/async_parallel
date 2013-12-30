@@ -7,7 +7,7 @@ module Socket_file : sig
   include Stringable with type t := t
 end = String
 
-module Debug = Async_core.Debug
+module Debug = Async_kernel.Debug
 
 let debug = Debug.parallel
 
@@ -40,3 +40,13 @@ module Cluster = struct
     worker_machines: string list; (* DNS name of worker machines *)
   } with sexp, bin_io
 end
+
+let socket_connect_inet socket (addr, port) =
+  let addr =
+    if U.Inet_addr.(=) addr (Lazy.force my_ip)
+    then begin
+      U.Inet_addr.localhost
+    end
+    else addr
+  in
+  Async.Std.Socket.connect socket (`Inet (addr, port))

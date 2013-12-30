@@ -34,16 +34,11 @@ let listener () =
   let rec loop port =
     let s = U.socket ~domain:U.PF_INET ~kind:U.SOCK_STREAM ~protocol:0 in
     try
-      U.bind s ~addr:(U.ADDR_INET (Lazy.force my_ip, port));
+      U.bind s ~addr:(U.ADDR_INET (U.Inet_addr.bind_any, port));
       U.listen ~max:500 s;
       U.set_nonblock s;
       U.setsockopt s U.SO_REUSEADDR true;
-      let (ip, port) =
-        match U.getsockname s with
-        | U.ADDR_INET (ip, port) -> (ip, port)
-        | U.ADDR_UNIX _ -> assert false
-      in
-      (s, (ip, port))
+      s, (Lazy.force my_ip, port)
     with
     | U.Unix_error (U.EADDRINUSE, _, _) ->
       syscall (fun () -> U.close s);
@@ -408,6 +403,10 @@ ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
 \"$EXE\" </dev/null || rm -rf $US
 )" bin_name async_config_set_var cwd local_name
 
+  (* This prevents 'The authenticity of host can't be established.... Are you sure you
+     want to continue connecting (yes/no)? ' messages *)
+  let ssh_options = ["-o"; "StrictHostKeyChecking=no"]
+
   (* We assume our own binary is not replaced during initialization. Sadly this is the
      best we can do, as unix provides no way to access the file of an unlinked program
      (proc/exe is just a symlink). *)
@@ -421,7 +420,7 @@ ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
         let module P = U.Process_info in
         let p =
           U.create_process ~prog:"ssh"
-            ~args:[machine; cmd (Filename.basename our_binary) our_cwd machine]
+            ~args:(ssh_options @ [machine; cmd (Filename.basename our_binary) our_cwd machine])
         in
         try
           really_io (U.single_write ~restart:false) p.P.stdin us
@@ -429,12 +428,11 @@ ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
           U.close p.P.stdin;
           let ic = U.in_channel_of_descr p.P.stdout in
           let (addr, port) =
-          (* The program might say other stuff during startup on stdout, just skip until
-             we find our sexp. *)
+            (* The program might say other stuff during startup on stdout, just skip until
+               we find our sexp. *)
             let rec loop () =
-              try
-                From_worker_machine.t_of_sexp
-                  (Sexp.of_string (Option.value_exn (In_channel.input_line ic)))
+              let line = Option.value_exn (In_channel.input_line ic) in
+              try From_worker_machine.t_of_sexp (Sexp.of_string line)
               with _ -> loop ()
             in loop ()
           in
@@ -561,11 +559,11 @@ let rec connected_host host f =
   let machines = Lazy.force machines in
   let (addr, port) = Hashtbl.find_exn machines host in
   let connect h =
-    let s = Unix.Socket.create Unix.Socket.Type.tcp in
+    let s = Socket.create Socket.Type.tcp in
     let rw =
-      Unix.Socket.connect s (`Inet (addr, port)) >>| fun s ->
-      let w = Writer.create (Unix.Socket.fd s) in
-      let r = Reader.create (Unix.Socket.fd s) in
+      socket_connect_inet s (addr, port) >>| fun s ->
+      let w = Writer.create (Socket.fd s) in
+      let r = Reader.create (Socket.fd s) in
       (r, w)
     in
     h.conn <- `Connecting (rw >>| fun (_r, _w) -> ());

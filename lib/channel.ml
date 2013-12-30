@@ -1,6 +1,7 @@
 open Core.Std
 module Std_unix = Unix
 open Async.Std
+open Import
 
 let _p s = Printf.printf "%s: %s\n%!" (Time.to_string (Time.now ())) s
 let _size a = String.length (Marshal.to_string a [Marshal.Closures])
@@ -16,7 +17,7 @@ let reified = Int.Table.create ()
 
 
 type ('a, 'b) t =
-  { socket : Std_unix.Inet_addr.t * int;
+  { socket : Unix.Inet_addr.t * int;
     mutable token : Token.t;
     mutable state: [ `Unconnected
                    | `Reified of int
@@ -36,7 +37,7 @@ let on_error t exn =
 
 let reify t =
   let s = Socket.create Socket.Type.tcp in
-  Socket.connect s (`Inet t.socket)
+  socket_connect_inet s t.socket
   >>| fun s ->
   let r =
     { fd = Unix.Fd.file_descr_exn (Socket.fd s);

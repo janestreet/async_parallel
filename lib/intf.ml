@@ -70,7 +70,7 @@ let hub ?buffer_age_limit () =
   let rec pick_port port =
     let s = Socket.create Socket.Type.tcp in
     Monitor.try_with (fun () ->
-      Socket.bind s (Socket.Address.Inet.create (Lazy.force my_ip) ~port))
+      Socket.bind s (Socket.Address.Inet.create Unix.Inet_addr.bind_any ~port))
     >>= function
     | Ok s -> return s
     | Error r ->
