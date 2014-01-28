@@ -83,10 +83,3 @@ Executable wide
   CompiledObject:     best
   Install:            false
   BuildDepends:       async_parallel
-
-Document "async_parallel"
-  Title:                Distributed computing library
-  Type:                 ocamlbuild (0.3)
-  BuildTools+:          ocamldoc
-  XOCamlbuildPath:      lib
-  XOCamlbuildLibraries: async_parallel
