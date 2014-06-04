@@ -131,7 +131,7 @@ let listener t =
         in
         (fun e -> error := e; Lazy.force close)
       in
-      Stream.iter (Monitor.errors (Writer.monitor conn.writer)) ~f:(fun e ->
+      Stream.iter (Monitor.detach_and_get_error_stream (Writer.monitor conn.writer)) ~f:(fun e ->
         let s = Exn.to_string e in
         Printf.printf "%s hub writer error %s\n%!" (Pid.to_string (Unix.getpid ())) s;
         close s);

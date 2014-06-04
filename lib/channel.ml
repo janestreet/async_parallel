@@ -45,7 +45,7 @@ let reify t =
       writer = Writer.create ?buffer_age_limit:t.buffer_age_limit (Socket.fd s);
     }
   in
-  Stream.iter_durably (Monitor.errors (Writer.monitor r.writer)) ~f:(on_error t);
+  Stream.iter_durably (Monitor.detach_and_get_error_stream (Writer.monitor r.writer)) ~f:(on_error t);
   r
 ;;
 

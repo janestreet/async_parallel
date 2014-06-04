@@ -16,7 +16,7 @@ end
 let go (type a) (type b) (type c) ~control_socket =
   if debug then dbp "worker process starting";
   let monitor = Monitor.create () in
-  Stream.iter (Monitor.errors monitor) ~f:(fun e ->
+  Stream.iter (Monitor.detach_and_get_error_stream monitor) ~f:(fun e ->
     if debug then
       dbp (sprintf "Worker_process: unhandled exception %s" (Exn.to_string e));
     Shutdown.shutdown 1);

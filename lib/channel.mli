@@ -26,6 +26,6 @@ val write_pre_packed : ('a, _) t -> 'a pre_packed -> unit
 val flushed    : (_, _) t -> unit Deferred.t
 val socket     : (_, _) t -> Unix.Inet_addr.t * int
 
-(** Similar to [Monitor.errors], collects all writer errors. If this function has never
+(** Similar to [Monitor.detach_and_get_error_stream], collects all writer errors. If this function has never
     been called, then exceptions will be raised directly *)
 val errors : (_, _) t -> exn Stream.t
