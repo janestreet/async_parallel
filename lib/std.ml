@@ -53,7 +53,7 @@
     supplied to [run] is marshalled and sent from the process that calls [run] to the
     worker process that will run [f]. Most, but not all values can be marshaled. Examples
     of values that can't be marshaled include C allocated abstract tagged values, custom
-    blocks with no serilize/deserialize method.
+    blocks with no serialize/deserialize method.
 
     The main process and all worker processes have a socket connected to the master
     process.  The master process's sole job is to service requests that are sent to
@@ -96,11 +96,11 @@
     ---------------
 
     When a channel is passed from one process to another, the open socket is not actually
-    passed. The API makes this pretty transparant, any api call will reconnect the
+    passed. The API makes this pretty transparent, any api call will reconnect the
     channel, but it is useful to be aware of what is really going on as if you aren't
     aware you may create a race condition. For example, if I spawn a worker connected to a
-    hub I have, and then I immediatly send something, it may or may not arrive, because
-    the worker may not have time to connect and recieve it. A better strategy is to wait
+    hub I have, and then I immediately send something, it may or may not arrive, because
+    the worker may not have time to connect and receive it. A better strategy is to wait
     for the worker to say hello, and then send the data. This also means that you might
     have created only one channel from a given hub, but you can end up with as many
     connections (client ids) as workers who got hold of that channel. You can address them
@@ -110,7 +110,7 @@
     Stdout and Stderr
     -----------------
 
-    Care has been taken to make printf style debugging work transparantly with parallel,
+    Care has been taken to make printf style debugging work transparently with parallel,
     even when run on a multiple machine cluster, stdout and stderr will be forwarded back
     to the master machine. This can cause some interleaving if you print a lot of
     messages, but generally works reasonably well (and we read and write in big chunks, so
@@ -120,7 +120,7 @@
     -------------------------------
 
     Monitor.t, Pcre.regexp, Writer.t, Reader.t, and similar kinds of objects shouldn't be
-    depended upon to marshal correctly. Pcre.regexp is just right out, it definitly won't
+    depended upon to marshal correctly. Pcre.regexp is just right out, it definitely won't
     work. Monitor.t, Writer.t, and Reader.t, because of their complex nature, generally
     tow the entire async scheduler along with them, and because of that they will fail if
     any job on the scheduler queue has a custom object (e.g. regexp, or other C object)
@@ -130,7 +130,7 @@
     Processes don't share memory
     ----------------------------
 
-    The library can make it look very transparant to create and use other processes, but
+    The library can make it look very transparent to create and use other processes, but
     please remember these can literally be on some other machine maybe halfway round the
     earth. Global variables you set in one worker process have no effect whatsoever on
     other worker processes. I've personally come to believe that this is good, it results
@@ -142,7 +142,7 @@
     Because of the way parallel works, with the master process an image of a very early
     state of one's program and workers forked from the master, it is usually not possible
     to share big static things in the way one might do in C using fork. Moreover, it isn't
-    necessarially a win as you might think, if you know about how unix only copies pages
+    necessarily a win as you might think, if you know about how unix only copies pages
     on write when a process forks, you know that it should be a win. But the garbage
     collector ruins that completely, because as it scans it will write to EVERY page,
     causing a copy on write fault to copy the page, so you'll end up with a non shared
@@ -154,7 +154,7 @@
     Why Not Just Fork!?
     -------------------
 
-    The unix savvy amoung you may ask, what the heck are you doing with master processes
+    The unix savvy among you may ask, what the heck are you doing with master processes
     and closure passing, just fork! Oh how that would make life easier, but alas, it
     really isn't possible. Why? You can't write async without threads, because the Unix
     API doesn't provide an asynchronous system call for every operation, meaning if you
@@ -165,8 +165,8 @@
     anything about what happens to threads in a process that forks (besides saying they
     don't think its a good idea). In every sane OS, only the forking thread continues in
     the child, all the other threads are dead. OK, fine you say, let them die. But their
-    mutexes, semephores and condition variables are in whatever state they were in the
-    moment you forked, that is to say, any state at all. Unfortunatly this means that
+    mutexes, semaphores and condition variables are in whatever state they were in the
+    moment you forked, that is to say, any state at all. Unfortunately this means that
     having created a thread that does anything meaningful (e.g. calls into libc), if you
     fork, all bets are off as to what happens in that child process. A dead thread may,
     for example, hold the lock around the C heap, which would mean that any call into libc
@@ -178,13 +178,13 @@
 
     The parallelism model implemented is strictly message passing, shared memory isn't
     implemented, but there are various hacks you could use to make this work
-    (e.g. implement it yourself). Bigarray already allowes mmaping files, so in theory
+    (e.g. implement it yourself). Bigarray already allows mmaping files, so in theory
     even a cluster of machines could all mmap a giant file and use/mutate it.
 
     Making Your Program Work on Multiple Machines
     ---------------------------------------------
 
-    The library makes this pretty transparant, however there are a couple of things to
+    The library makes this pretty transparent, however there are a couple of things to
     watch out for if you want it to work seamlessly. First of all, your program should be
     able to run with no arguments. Ideally you'd call Parallel.init before parsing
     arguments, or at least you'd check to see if you're a worker machine before parsing

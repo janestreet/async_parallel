@@ -29,13 +29,19 @@ type ('a, 'b) t =
 
 let socket t = t.socket
 
+let unreify t r id =
+  don't_wait_for (Monitor.try_with (fun () -> Writer.close r.writer) >>| ignore);
+  don't_wait_for (Monitor.try_with (fun () -> Reader.close r.reader) >>| ignore);
+  Hashtbl.remove reified id;
+  t.state <- `Unconnected
+
 let on_error t exn =
   match t.errors with
   | None -> raise exn
   | Some errors -> Tail.extend errors exn;
 ;;
 
-let reify t =
+let reify t id =
   let s = Socket.create Socket.Type.tcp in
   socket_connect_inet s t.socket
   >>| fun s ->
@@ -45,7 +51,10 @@ let reify t =
       writer = Writer.create ?buffer_age_limit:t.buffer_age_limit (Socket.fd s);
     }
   in
-  Stream.iter_durably (Monitor.detach_and_get_error_stream (Writer.monitor r.writer)) ~f:(on_error t);
+  let monitor = Monitor.detach_and_get_error_stream (Writer.monitor r.writer) in
+  Stream.iter_durably monitor ~f:(fun exn ->
+    unreify t r id;
+    on_error t exn);
   r
 ;;
 
@@ -75,7 +84,9 @@ let rec rereify t =
   t.token <- Token.mine;
   let q = Queue.create () in
   let r =
-    reify t >>| (fun r ->
+    let id = !next_id in
+    incr next_id;
+    reify t id >>| (fun r ->
       match t.state with
       | `Unconnected -> assert false
       | `Dead _ ->
@@ -87,8 +98,6 @@ let rec rereify t =
              (fun () -> Writer.close r.writer) >>| ignore)
       | `Reified _ -> assert false
       | `Reifying _ ->
-        let id = !next_id in
-        incr next_id;
         t.state <- `Reified id;
         Hashtbl.replace reified ~key:id ~data:r;
         Queue.iter q ~f:(fun v -> write_bigstring ~can_destroy:false t v))
@@ -177,10 +186,14 @@ let rec read_full t =
   else begin
     match t.state with
     | `Unconnected -> rereify t >>= (fun () -> read_full t)
-    | `Reified r ->
-      begin match Hashtbl.find reified r with
+    | `Reified id ->
+      begin match Hashtbl.find reified id with
       | None -> assert false
-      | Some r -> Reader.read_marshal r.reader
+      | Some r ->
+        Monitor.try_with (fun () -> Reader.read_marshal r.reader)
+        >>| function
+        | Ok res -> res
+        | Error exn -> unreify t r id; raise exn
       end
     | `Reifying (_, r) -> r >>= (fun () -> read_full t)
     | `Dead exn -> raise exn
