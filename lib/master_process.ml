@@ -376,7 +376,7 @@ module Worker_machines = struct
     let tbl = Lazy.force machines in
     Hashtbl.clear tbl;
     Hashtbl.iter m.To_worker_machine.machines ~f:(fun ~key ~data ->
-      Hashtbl.replace tbl ~key ~data);
+      Hashtbl.set tbl ~key ~data);
     master_name := Some (m.To_worker_machine.master_name);
     never_returns (run listening_socket)
   ;;
@@ -437,7 +437,7 @@ ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
             in loop ()
           in
           child_machines := p :: !child_machines;
-          Hashtbl.replace tbl ~key:machine ~data:(addr, port);
+          Hashtbl.set tbl ~key:machine ~data:(addr, port);
           (addr, port)
         with e ->
           (try ignore (Signal.send Signal.kill (`Pid p.P.pid) : [`No_such_process | `Ok])
@@ -474,11 +474,11 @@ let init ?cluster () =
     begin match cluster with
     | None ->
       local_name := Some "local";
-      Hashtbl.replace (Lazy.force machines) ~key:(Option.value_exn !local_name)
+      Hashtbl.set (Lazy.force machines) ~key:(Option.value_exn !local_name)
         ~data:addr;
     | Some c ->
       local_name := Some c.Cluster.master_machine;
-      Hashtbl.replace (Lazy.force machines) ~key:(Option.value_exn !local_name)
+      Hashtbl.set (Lazy.force machines) ~key:(Option.value_exn !local_name)
         ~data:addr;
       try Worker_machines.init c
       with e ->

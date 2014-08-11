@@ -99,7 +99,7 @@ let rec rereify t =
       | `Reified _ -> assert false
       | `Reifying _ ->
         t.state <- `Reified id;
-        Hashtbl.replace reified ~key:id ~data:r;
+        Hashtbl.set reified ~key:id ~data:r;
         Queue.iter q ~f:(fun v -> write_bigstring ~can_destroy:false t v))
   in
   t.state <- `Reifying (q, r);
