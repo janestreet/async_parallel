@@ -18,7 +18,12 @@ val init : ?cluster:Cluster.t
       asyncy has already happened.  So, by default, [Parallel.init] fails if you call it
       after doing anything asyncy (defined as "have created the async scheduler").  You
       can override this behavior, but it would be much better to change your program to
-      call [init] earlier. *)
+      call [init] earlier.
+
+      [~fail_if_async_has_been_initialized] exists only because of code that existed prior
+      to [init] checking whether the Async scheduler has been initialized.  That old code
+      uses [~fail_if_async_has_been_initialized:false].  All new code should not supply
+      [~fail_if_async_has_been_initialized] and should accept the default. *)
   -> ?fail_if_async_has_been_initialized : bool (* default is true *)
   -> unit
   -> unit

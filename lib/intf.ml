@@ -75,7 +75,7 @@ let hub ?buffer_age_limit () =
     | Ok s -> return s
     | Error r ->
       match Monitor.extract_exn r with
-      | Unix.Unix_error (Unix.EADDRINUSE, _, _) ->
+      | Unix.Unix_error (EADDRINUSE, _, _) ->
         ignore (Monitor.try_with (fun () -> Unix.close (Socket.fd s)));
         pick_port (port + 1 + Random.State.int (Lazy.force st) 10)
       | exn -> raise exn

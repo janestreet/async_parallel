@@ -26,7 +26,7 @@ exception Cannot_find_available_port
 let syscall th =
   let rec loop () =
     try th ()
-    with U.Unix_error (U.EINTR, _, _) -> loop ()
+    with U.Unix_error (EINTR, _, _) -> loop ()
   in loop ()
 
 let st = lazy (Random.State.make_self_init ())
@@ -40,7 +40,7 @@ let listener () =
       U.setsockopt s U.SO_REUSEADDR true;
       s, (Lazy.force my_ip, port)
     with
-    | U.Unix_error (U.EADDRINUSE, _, _) ->
+    | U.Unix_error (EADDRINUSE, _, _) ->
       syscall (fun () -> U.close s);
       let port = port + 1 + Random.State.int (Lazy.force st) 10 in
       if port < 30000 then loop port
@@ -243,7 +243,8 @@ let run listener : never_returns =
           in
           syscall (fun () ->
             U.select ~read:fds ~write:[] ~except:[] ~timeout:(`After 1.) ())
-        with U.Unix_error (U.EBADF, _, _) ->
+        with
+        | U.Unix_error (EBADF, _, _) ->
           Hash_set.filter_inplace clients ~f:(fun fd ->
           try ignore (syscall (fun () -> U.fstat fd)); true
           with _ ->
@@ -280,7 +281,7 @@ let run listener : never_returns =
           let rec accept () =
             let res =
               try Some (U.accept listener) with
-              | U.Unix_error ((U.EWOULDBLOCK | U.EAGAIN | U.ECONNABORTED | U.EINTR), _, _)
+              | U.Unix_error ((EWOULDBLOCK | EAGAIN | ECONNABORTED | EINTR), _, _)
                 -> None
             in
             match res with
@@ -361,7 +362,7 @@ module Worker_machines = struct
     let rec accept () =
       let res =
         try Some (U.accept listening_socket) with
-        | U.Unix_error ((U.EWOULDBLOCK | U.EAGAIN | U.ECONNABORTED | U.EINTR), _, _) ->
+        | U.Unix_error ((EWOULDBLOCK | EAGAIN | ECONNABORTED | EINTR), _, _) ->
           None
       in
       match res with
