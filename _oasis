@@ -19,7 +19,7 @@ Description:
   cluster of machines.
 
 Library async_parallel
-  Path:               lib
+  Path:               src
   Pack:               true
   Modules:            Channel,
                       Hub,
@@ -43,42 +43,42 @@ Library async_parallel
                       threads
 
 Executable deep
-  Path:               examples
+  Path:               example
   MainIs:             deep.ml
   CompiledObject:     best
   Install:            false
   BuildDepends:       async_parallel
 
 Executable echo_server
-  Path:               examples
+  Path:               example
   MainIs:             echo_server.ml
   CompiledObject:     best
   Install:            false
   BuildDepends:       async_parallel
 
 Executable pingpong
-  Path:               examples
+  Path:               example
   MainIs:             pingpong.ml
   CompiledObject:     best
   Install:            false
   BuildDepends:       async_parallel
 
 Executable ring
-  Path:               examples
+  Path:               example
   MainIs:             ring.ml
   CompiledObject:     best
   Install:            false
   BuildDepends:       async_parallel
 
 Executable simple
-  Path:               examples
+  Path:               example
   MainIs:             simple.ml
   CompiledObject:     best
   Install:            false
   BuildDepends:       async_parallel
 
 Executable wide
-  Path:               examples
+  Path:               example
   MainIs:             wide.ml
   CompiledObject:     best
   Install:            false
