@@ -1,6 +1,6 @@
 open Core.Std
 open Async.Std
-open Async_parallel.Std
+open Async_parallel_deprecated.Std
 module Glog = Log.Global
 
 let p s = Glog.info "%s %s: %s\n%!" (Unix.gethostname ()) (Pid.to_string (Unix.getpid ())) s

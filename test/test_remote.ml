@@ -1,6 +1,6 @@
 open Core.Std
 open Async.Std
-open Async_parallel.Std
+open Async_parallel_deprecated.Std
 
 let wide () =
   Deferred.List.iter [ 1; 2; 10; 100 ] ~f:(fun num_children ->

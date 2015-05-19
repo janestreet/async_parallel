@@ -1,3 +1,5 @@
+(** DEPRECATION WARNING: Async_parallel has been deprecated in favor of Rpc_parallel. *)
+
 
 (** [Parallel] is a library for running tasks in other processes on a cluster of machines.
     At its simplest, it exposes the [Parallel.run] function:

@@ -242,7 +242,8 @@ let run listener : never_returns =
             @ Hash_set.to_list clients
           in
           syscall (fun () ->
-            U.select ~read:fds ~write:[] ~except:[] ~timeout:(`After 1.) ())
+            U.select ~read:fds ~write:[] ~except:[]
+              ~timeout:(`After Time_ns.Span.second) ())
         with
         | U.Unix_error (EBADF, _, _) ->
           Hash_set.filter_inplace clients ~f:(fun fd ->
