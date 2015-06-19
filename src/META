@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: c399f14f757c579c52f879bcb886ad52)
+version = "112.35.00"
+description = "Distributed computing library"
+requires = "async bin_prot core sexplib threads"
+archive(byte) = "async_parallel_deprecated.cma"
+archive(byte, plugin) = "async_parallel_deprecated.cma"
+archive(native) = "async_parallel_deprecated.cmxa"
+archive(native, plugin) = "async_parallel_deprecated.cmxs"
+exists_if = "async_parallel_deprecated.cma"
+# OASIS_STOP
+

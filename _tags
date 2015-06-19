@@ -1,3 +1,97 @@
 # OASIS_START
+# DO NOT EDIT (digest: c9561073cd9e596e267183865df7e804)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+true: annot, bin_annot
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Library async_parallel_deprecated
+"src/async_parallel_deprecated.cmxs": use_async_parallel_deprecated
+"src/channel.cmx": for-pack(Async_parallel_deprecated)
+"src/hub.cmx": for-pack(Async_parallel_deprecated)
+"src/import.cmx": for-pack(Async_parallel_deprecated)
+"src/intf.cmx": for-pack(Async_parallel_deprecated)
+"src/master_process.cmx": for-pack(Async_parallel_deprecated)
+"src/std.cmx": for-pack(Async_parallel_deprecated)
+"src/token.cmx": for-pack(Async_parallel_deprecated)
+"src/worker_process.cmx": for-pack(Async_parallel_deprecated)
+<src/*.ml{,i,y}>: package(async)
+<src/*.ml{,i,y}>: package(bin_prot)
+<src/*.ml{,i,y}>: package(bin_prot.syntax)
+<src/*.ml{,i,y}>: package(core)
+<src/*.ml{,i,y}>: package(sexplib)
+<src/*.ml{,i,y}>: package(sexplib.syntax)
+<src/*.ml{,i,y}>: package(threads)
+# Executable deep
+<example/deep.{native,byte}>: package(async)
+<example/deep.{native,byte}>: package(bin_prot)
+<example/deep.{native,byte}>: package(bin_prot.syntax)
+<example/deep.{native,byte}>: package(core)
+<example/deep.{native,byte}>: package(sexplib)
+<example/deep.{native,byte}>: package(sexplib.syntax)
+<example/deep.{native,byte}>: package(threads)
+<example/deep.{native,byte}>: use_async_parallel_deprecated
+# Executable echo_server
+<example/echo_server.{native,byte}>: package(async)
+<example/echo_server.{native,byte}>: package(bin_prot)
+<example/echo_server.{native,byte}>: package(bin_prot.syntax)
+<example/echo_server.{native,byte}>: package(core)
+<example/echo_server.{native,byte}>: package(sexplib)
+<example/echo_server.{native,byte}>: package(sexplib.syntax)
+<example/echo_server.{native,byte}>: package(threads)
+<example/echo_server.{native,byte}>: use_async_parallel_deprecated
+# Executable pingpong
+<example/pingpong.{native,byte}>: package(async)
+<example/pingpong.{native,byte}>: package(bin_prot)
+<example/pingpong.{native,byte}>: package(bin_prot.syntax)
+<example/pingpong.{native,byte}>: package(core)
+<example/pingpong.{native,byte}>: package(sexplib)
+<example/pingpong.{native,byte}>: package(sexplib.syntax)
+<example/pingpong.{native,byte}>: package(threads)
+<example/pingpong.{native,byte}>: use_async_parallel_deprecated
+# Executable ring
+<example/ring.{native,byte}>: package(async)
+<example/ring.{native,byte}>: package(bin_prot)
+<example/ring.{native,byte}>: package(bin_prot.syntax)
+<example/ring.{native,byte}>: package(core)
+<example/ring.{native,byte}>: package(sexplib)
+<example/ring.{native,byte}>: package(sexplib.syntax)
+<example/ring.{native,byte}>: package(threads)
+<example/ring.{native,byte}>: use_async_parallel_deprecated
+# Executable simple
+<example/simple.{native,byte}>: package(async)
+<example/simple.{native,byte}>: package(bin_prot)
+<example/simple.{native,byte}>: package(bin_prot.syntax)
+<example/simple.{native,byte}>: package(core)
+<example/simple.{native,byte}>: package(sexplib)
+<example/simple.{native,byte}>: package(sexplib.syntax)
+<example/simple.{native,byte}>: package(threads)
+<example/simple.{native,byte}>: use_async_parallel_deprecated
+# Executable wide
+<example/wide.{native,byte}>: package(async)
+<example/wide.{native,byte}>: package(bin_prot)
+<example/wide.{native,byte}>: package(bin_prot.syntax)
+<example/wide.{native,byte}>: package(core)
+<example/wide.{native,byte}>: package(sexplib)
+<example/wide.{native,byte}>: package(sexplib.syntax)
+<example/wide.{native,byte}>: package(threads)
+<example/wide.{native,byte}>: use_async_parallel_deprecated
+<example/*.ml{,i,y}>: package(async)
+<example/*.ml{,i,y}>: package(bin_prot)
+<example/*.ml{,i,y}>: package(bin_prot.syntax)
+<example/*.ml{,i,y}>: package(core)
+<example/*.ml{,i,y}>: package(sexplib)
+<example/*.ml{,i,y}>: package(sexplib.syntax)
+<example/*.ml{,i,y}>: package(threads)
+<example/*.ml{,i,y}>: use_async_parallel_deprecated
 # OASIS_STOP
 <{src,test}/*.ml{,i}>     : syntax_camlp4o
