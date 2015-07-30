@@ -2,7 +2,7 @@ open Core.Std
 open Async.Std
 open Async_parallel_deprecated.Std
 
-let p s = Printf.printf "%s: %s\n%!" (Pid.to_string (Unix.getpid ())) s
+let p s = Core.Std.Printf.printf "%s: %s\n%!" (Pid.to_string (Unix.getpid ())) s
 
 let add c f =
   (* Run the ring nodes on either of these two machines, but never on the master. *)

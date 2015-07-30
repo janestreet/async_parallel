@@ -133,7 +133,7 @@ let listener t =
       in
       Stream.iter (Monitor.detach_and_get_error_stream (Writer.monitor conn.writer)) ~f:(fun e ->
         let s = Exn.to_string e in
-        Printf.printf "%s hub writer error %s\n%!" (Pid.to_string (Unix.getpid ())) s;
+        Core.Std.Printf.printf "%s hub writer error %s\n%!" (Pid.to_string (Unix.getpid ())) s;
         close s);
       Hashtbl.add_exn t.clients ~key:id ~data:conn;
       handle_client t ~close ~conn ~id ~stop:(Ivar.read closed);

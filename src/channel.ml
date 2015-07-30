@@ -3,7 +3,7 @@ module Std_unix = Unix
 open Async.Std
 open Import
 
-let _p s = Printf.printf "%s: %s\n%!" (Time.to_string (Time.now ())) s
+let _p s = Core.Std.Printf.printf "%s: %s\n%!" (Time.to_string (Time.now ())) s
 let _size a = String.length (Marshal.to_string a [Marshal.Closures])
 
 type reified =
@@ -144,9 +144,9 @@ let pre_pack v =
     let tag = Obj.tag (Obj.repr v) in
     let size = Obj.size (Obj.repr v) in
     let subv = Obj.field (Obj.repr v) 0 in
-    Printf.printf "Channel.pre_pack: tag=%d; size=%d; exn %s\n%!" tag size (Exn.to_string e);
-    Printf.printf "subv: tag = %d; size = %d\n%!" (Obj.tag subv) (Obj.size subv);
-    List.iter ~f:(fun (name, tag) -> Printf.printf "%s = %d\n%!" name tag) [
+    Core.Std.Printf.printf "Channel.pre_pack: tag=%d; size=%d; exn %s\n%!" tag size (Exn.to_string e);
+    Core.Std.Printf.printf "subv: tag = %d; size = %d\n%!" (Obj.tag subv) (Obj.size subv);
+    List.iter ~f:(fun (name, tag) -> Core.Std.Printf.printf "%s = %d\n%!" name tag) [
       "custom_tag", Obj.custom_tag;
       "lazy_tag", Obj.lazy_tag;
       "closure_tag", Obj.closure_tag;
