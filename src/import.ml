@@ -2,7 +2,7 @@ open Core.Std
 module U = Unix
 
 module Socket_file : sig
-  type t with sexp_of
+  type t [@@deriving sexp_of]
 
   include Stringable with type t := t
 end = String
@@ -38,7 +38,7 @@ module Cluster = struct
   type t = {
     master_machine: string; (* DNS name of the machine that will start it all *)
     worker_machines: string list; (* DNS name of worker machines *)
-  } with sexp, bin_io
+  } [@@deriving sexp, bin_io]
 end
 
 let socket_connect_inet socket (addr, port) =

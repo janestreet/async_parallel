@@ -7,7 +7,7 @@ open Import
 
 (* Init will raise this if any worker machine in the cluster fails initialization. It is
    safe to catch this exception and call init again. *)
-exception Error_initializing_worker_machine of string * exn with sexp
+exception Error_initializing_worker_machine of string * exn [@@deriving sexp]
 
 (** [init] initializes the system and creates the master process.  [master_init], if
     specified, is called in the master process and may be used for cleanup/initialization

@@ -26,7 +26,7 @@ Either parallel isn't running or we're not the main process.
     | Ok () -> Ok ()
     | Error exit_or_signal ->
       Error (Error.create "Parallel's master process did not exit cleanly" exit_or_signal
-               (<:sexp_of< Unix.Exit_or_signal.error >>))
+               ([%sexp_of: Unix.Exit_or_signal.error]))
 ;;
 
 let spawn (type a) (type b) (type c)

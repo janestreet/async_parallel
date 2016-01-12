@@ -159,7 +159,6 @@ let pre_pack v =
       "double_tag", Obj.double_tag;
       "double_array_tag", Obj.double_array_tag;
       "custom_tag", Obj.custom_tag;
-      "final_tag", Obj.final_tag;
       "int_tag", Obj.int_tag;
       "out_of_heap_tag", Obj.out_of_heap_tag;
       "unaligned_tag", Obj.unaligned_tag;
@@ -206,7 +205,7 @@ let read t =
   | `Ok a -> a
 ;;
 
-exception Closed with sexp
+exception Closed [@@deriving sexp]
 
 let close t =
   if Token.valid t.token then begin

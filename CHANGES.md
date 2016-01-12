@@ -1,3 +1,7 @@
+## 113.24.00
+
+- Switched to ppx.
+
 ## 112.35.00
 
 - Renamed `Async_parallel` as `Async_parallel_deprecated`; one should

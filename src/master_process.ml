@@ -35,7 +35,7 @@ let listener () =
     let s = U.socket ~domain:U.PF_INET ~kind:U.SOCK_STREAM ~protocol:0 in
     try
       U.bind s ~addr:(U.ADDR_INET (U.Inet_addr.bind_any, port));
-      U.listen ~max:500 s;
+      U.listen ~backlog:500 s;
       U.set_nonblock s;
       U.setsockopt s U.SO_REUSEADDR true;
       s, (Lazy.force my_ip, port)
@@ -215,7 +215,7 @@ let run listener : never_returns =
     | Some _ -> () (* We're not the master *)
     | None -> (* We should tell all the other machines to shutdown *)
       if debug then dbp "we're the master, so sending shutdown to everyone";
-      Hashtbl.iter (Lazy.force machines) ~f:(fun ~key:_ ~data:(ip, port) ->
+      Hashtbl.iteri (Lazy.force machines) ~f:(fun ~key:_ ~data:(ip, port) ->
         try
           Result.ok_exn (talk_machine ip port (fun s -> write s Request.Shutdown; Ok ()))
         with _ -> ())
@@ -328,18 +328,18 @@ let run listener : never_returns =
     end_the_world 3
 ;;
 
-exception Error_initializing_worker_machine of string * exn with sexp
+exception Error_initializing_worker_machine of string * exn [@@deriving sexp]
 
 module Worker_machines = struct
   module To_worker_machine = struct
     type t = {
       master_name: string;
-      machines: (U.Inet_addr.t * int) String.Table.t;
-    } with sexp
+      machines: (U.Inet_addr.Blocking_sexp.t * int) String.Table.t;
+    } [@@deriving sexp]
   end
 
   module From_worker_machine = struct
-    type t = (U.Inet_addr.t * int) with sexp
+    type t = (U.Inet_addr.Blocking_sexp.t * int) [@@deriving sexp]
   end
 
   (* We're a worker machine, not the master. *)
@@ -377,7 +377,7 @@ module Worker_machines = struct
     In_channel.close ic;
     let tbl = Lazy.force machines in
     Hashtbl.clear tbl;
-    Hashtbl.iter m.To_worker_machine.machines ~f:(fun ~key ~data ->
+    Hashtbl.iteri m.To_worker_machine.machines ~f:(fun ~key ~data ->
       Hashtbl.set tbl ~key ~data);
     master_name := Some (m.To_worker_machine.master_name);
     never_returns (run listening_socket)

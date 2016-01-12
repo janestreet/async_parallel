@@ -1,0 +1,7 @@
+version = "$(pkg_version)"
+description = "Distributed computing library"
+requires = "async bin_prot core fieldslib ppx_assert.runtime-lib ppx_bench.runtime-lib ppx_expect.collector ppx_inline_test.runtime-lib sexplib typerep variantslib"
+archive(byte          ) = "async_parallel_deprecated.cma"
+archive(native        ) = "async_parallel_deprecated.cmxa"
+archive(native, plugin) = "async_parallel_deprecated.cmxs"
+exists_if = "async_parallel_deprecated.cma"

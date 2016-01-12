@@ -11,7 +11,7 @@ open Async.Std
 open Import
 
 module Client_id : sig
-  type t with sexp
+  type t [@@deriving sexp]
   include Comparable with type t := t
   include Hashable with type t := t
 end

@@ -3,7 +3,7 @@ open Async.Std
 open Import
 
 module Client_id : sig
-  type t with sexp
+  type t [@@deriving sexp]
 
   include Comparable with type t := t
   include Hashable with type t := t
@@ -172,7 +172,7 @@ let send t id a =
 let send_to_all t a =
   ensure_valid t;
   let s = Marshal.to_string a [Marshal.Closures] in
-  Hashtbl.iter t.clients ~f:(fun ~key:_ ~data:conn -> Writer.write conn.writer s);
+  Hashtbl.iteri t.clients ~f:(fun ~key:_ ~data:conn -> Writer.write conn.writer s);
 ;;
 
 let flushed t =
