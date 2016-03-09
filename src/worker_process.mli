@@ -11,8 +11,8 @@
     5. exits.
 *)
 
-open Core.Std
-open Async.Std
+open! Core.Std
+open! Async.Std
 
 module To_worker : sig
   type ('a, 'b, 'c) t =

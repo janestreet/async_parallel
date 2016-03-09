@@ -1,6 +1,6 @@
-open Core.Std
-open Async.Std
-open Import
+open! Core.Std
+open! Async.Std
+open! Import
 
 (** [init] initializes the system and creates the master process.  [master_init], if
     specified, is called in the master process and may be used for cleanup/initialization
@@ -20,10 +20,13 @@ val init : ?cluster:Cluster.t
       can override this behavior, but it would be much better to change your program to
       call [init] earlier.
 
+      [~close_stdout_and_stderr] will close [stdout] and [stderr] in the master process.
+
       [~fail_if_async_has_been_initialized] exists only because of code that existed prior
       to [init] checking whether the Async scheduler has been initialized.  That old code
       uses [~fail_if_async_has_been_initialized:false].  All new code should not supply
       [~fail_if_async_has_been_initialized] and should accept the default. *)
+  -> ?close_stdout_and_stderr : bool (* default is false *)
   -> ?fail_if_async_has_been_initialized : bool (* default is true *)
   -> unit
   -> unit

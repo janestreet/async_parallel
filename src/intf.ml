@@ -4,10 +4,10 @@ open Import
 
 let master_pid = ref None
 
-let init ?cluster ?(fail_if_async_has_been_initialized = true) () =
+let init ?cluster ?close_stdout_and_stderr ?(fail_if_async_has_been_initialized = true) () =
   if fail_if_async_has_been_initialized && not (Scheduler.is_ready_to_initialize ()) then
     failwith "Parallel.init called after async was initialized";
-  master_pid := Some (Master_process.init ?cluster ());
+  master_pid := Some (Master_process.init ?cluster ?close_stdout_and_stderr ());
 ;;
 
 let shutdown () =

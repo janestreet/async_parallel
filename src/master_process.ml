@@ -465,7 +465,7 @@ ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
           Ok ())))
 end
 
-let init ?cluster () =
+let init ?cluster ?(close_stdout_and_stderr = false) () =
   let worker_name = Sys.getenv "ASYNC_PARALLEL_IS_CHILD_MACHINE" in
   if worker_name <> None then
     Worker_machines.as_worker_machine (Option.value_exn worker_name)
@@ -493,7 +493,11 @@ let init ?cluster () =
     match U.fork () with
     | `In_the_child ->
       (* The master process *)
-      never_returns (run listening_socket);
+       begin
+         if close_stdout_and_stderr then
+           (Unix.(close stdout); Unix.(close stderr))
+       end;
+       never_returns (run listening_socket);
     | `In_the_parent master_pid ->
       (* The main process *)
       if debug then

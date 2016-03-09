@@ -6,9 +6,9 @@
     Unless otherwise noted none of the below functions may be called in a process other
     than the one that created the hub. *)
 
-open Core.Std
-open Async.Std
-open Import
+open! Core.Std
+open! Async.Std
+open! Import
 
 module Client_id : sig
   type t [@@deriving sexp]

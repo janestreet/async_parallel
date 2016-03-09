@@ -1,9 +1,9 @@
 (* The master process is a child of the main process that is using the parallel library.
    It is responsible for the worker processes, which are in turn its children. *)
 
-open Core.Std
-open Async.Std
-open Import
+open! Core.Std
+open! Async.Std
+open! Import
 
 (* Init will raise this if any worker machine in the cluster fails initialization. It is
    safe to catch this exception and call init again. *)
@@ -21,7 +21,11 @@ exception Error_initializing_worker_machine of string * exn [@@deriving sexp]
     processes on these machines. The current machine is implicitly included in the set of
     available machines.
 *)
-val init : ?cluster:Cluster.t -> unit -> Pid.t (* of the master process *)
+val init :
+  ?cluster:Cluster.t ->
+  ?close_stdout_and_stderr:bool ->
+  unit ->
+  Pid.t (* of the master process *)
 
 (** All the functions below are called in either the main process or a worker process. *)
 
