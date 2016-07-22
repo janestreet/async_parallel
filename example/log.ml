@@ -11,7 +11,7 @@ let foo () =
 ;;
 
 let main () =
-  Parallel.run ~where:(`On "ldn-qws-r01") foo >>> function
+  Parallel.run ~where:(`On "machine1") foo >>> function
   | Error e -> p (sprintf "died with exception %s" e)
   | Ok str ->
     p (sprintf "main process gets the result: %s" str);
@@ -22,7 +22,7 @@ let () =
   Exn.handle_uncaught ~exit:true (fun () ->
     Parallel.init ~cluster:
       {Cluster.master_machine = Unix.gethostname ();
-       worker_machines = ["ldn-qws-r01"; "ldn-qws-r02"]} ();
+       worker_machines = ["machine1"; "machine2"]} ();
     p "calling main";
     main ();
     p "calling scheduler go";
