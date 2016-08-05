@@ -1,0 +1,6 @@
+(library
+ ((name async_parallel_deprecated)
+  (public_name async_parallel)
+  (libraries (async
+              core
+              sexplib))))
