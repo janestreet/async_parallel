@@ -1,0 +1,11 @@
+(alias
+ ((name runtest)
+  (deps (qtest.exe test_remote.exe))
+  (action "./qtest.exe")))
+
+(executables
+ ((names (qtest test_remote))
+  (libraries (async
+              async_parallel_deprecated
+              core
+              qtest_lib))))
