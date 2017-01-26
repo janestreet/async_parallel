@@ -11,7 +11,7 @@
     5. exits.
 *)
 
-open! Core.Std
+open! Core
 open! Async.Std
 
 module To_worker : sig

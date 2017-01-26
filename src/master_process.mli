@@ -1,7 +1,7 @@
 (* The master process is a child of the main process that is using the parallel library.
    It is responsible for the worker processes, which are in turn its children. *)
 
-open! Core.Std
+open! Core
 open! Async.Std
 open! Import
 

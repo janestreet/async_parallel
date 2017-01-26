@@ -1,4 +1,4 @@
-open Core.Std
+open Core
 
 (** Token is a mechanism to detect when an object is not in the process where it was
     created. Every process has a token, which occupies some area of physical

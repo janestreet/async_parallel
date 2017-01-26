@@ -2,7 +2,7 @@
     [Hub.t].  Channels are portable across processes.  A channel can be sent to another
     process, either explicitly or by being in a closure and it will continue to work. *)
 
-open! Core.Std
+open! Core
 open! Async.Std
 open! Import
 

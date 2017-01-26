@@ -6,7 +6,7 @@
     Unless otherwise noted none of the below functions may be called in a process other
     than the one that created the hub. *)
 
-open! Core.Std
+open! Core
 open! Async.Std
 open! Import
 

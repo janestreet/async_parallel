@@ -1,7 +1,7 @@
 (* The master process cannot use async, because async would start threads.  We also need
    to throw away any async state that might have been there when we were forked. *)
 
-open Core.Std
+open Core
 open Import
 
 module U = Unix

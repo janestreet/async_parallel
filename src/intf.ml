@@ -1,4 +1,4 @@
-open Core.Std
+open Core
 open Async.Std
 open Import
 
@@ -84,7 +84,7 @@ let hub ?buffer_age_limit () =
   Hub.create ?buffer_age_limit (Socket.listen s)
 ;;
 
-let is_worker_machine () = Core.Std.Sys.getenv "ASYNC_PARALLEL_IS_CHILD_MACHINE" <> None
+let is_worker_machine () = Core.Sys.getenv "ASYNC_PARALLEL_IS_CHILD_MACHINE" <> None
 
 let round_robin = Master_process.round_robin
 let random = Master_process.random
