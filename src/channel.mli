@@ -3,7 +3,7 @@
     process, either explicitly or by being in a closure and it will continue to work. *)
 
 open! Core
-open! Async.Std
+open! Async
 open! Import
 
 type ('to_hub, 'from_hub) t

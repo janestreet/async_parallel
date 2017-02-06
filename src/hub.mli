@@ -7,7 +7,7 @@
     than the one that created the hub. *)
 
 open! Core
-open! Async.Std
+open! Async
 open! Import
 
 module Client_id : sig

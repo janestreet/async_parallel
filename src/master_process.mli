@@ -2,7 +2,7 @@
    It is responsible for the worker processes, which are in turn its children. *)
 
 open! Core
-open! Async.Std
+open! Async
 open! Import
 
 (* Init will raise this if any worker machine in the cluster fails initialization. It is

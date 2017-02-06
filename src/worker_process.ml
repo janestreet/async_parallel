@@ -1,5 +1,5 @@
 open Core
-open Async.Std
+open Async
 open Import
 
 module To_worker = struct

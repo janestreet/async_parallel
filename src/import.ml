@@ -49,4 +49,4 @@ let socket_connect_inet socket (addr, port) =
     end
     else addr
   in
-  Async.Std.Socket.connect socket (`Inet (addr, port))
+  Async.Socket.connect socket (`Inet (addr, port))

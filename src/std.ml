@@ -242,8 +242,8 @@ module Cluster = Import.Cluster
 
 (* module Shm : sig
  *   type 'a descriptor
- *   val copy_to : 'a -> 'a descriptor Async.Std.Deferred.t
- *   val reify : 'a descriptor -> 'a Async.Std.Deferred.t
+ *   val copy_to : 'a -> 'a descriptor Async.Deferred.t
+ *   val reify : 'a descriptor -> 'a Async.Deferred.t
  * end = Shm *)
 
 (* This toplevel module expression only runs in processes spawned by

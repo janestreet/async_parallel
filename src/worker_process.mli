@@ -12,7 +12,7 @@
 *)
 
 open! Core
-open! Async.Std
+open! Async
 
 module To_worker : sig
   type ('a, 'b, 'c) t =

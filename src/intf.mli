@@ -1,5 +1,5 @@
 open! Core
-open! Async.Std
+open! Async
 open! Import
 
 (** [init] initializes the system and creates the master process.  [master_init], if

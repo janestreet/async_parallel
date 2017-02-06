@@ -1,5 +1,5 @@
 open Core
-open Async.Std
+open Async
 open Async_parallel_deprecated.Std
 
 let p s = Core.Printf.printf "%s: %s\n%!" (Pid.to_string (Unix.getpid ())) s

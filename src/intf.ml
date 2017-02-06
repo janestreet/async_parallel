@@ -1,5 +1,5 @@
 open Core
-open Async.Std
+open Async
 open Import
 
 let master_pid = ref None

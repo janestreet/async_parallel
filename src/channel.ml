@@ -1,6 +1,6 @@
 open Core
 module Std_unix = Unix
-open Async.Std
+open Async
 open Import
 
 let _p s = Core.Printf.printf "%s: %s\n%!" (Time.to_string (Time.now ())) s

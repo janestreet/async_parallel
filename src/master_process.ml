@@ -131,7 +131,7 @@ let create_worker_process () =
   | `In_the_child ->
     Signals.restore ();
     (* We're in the child, so it's OK to use Async. *)
-    let open Async.Std in
+    let open Async in
     let control_socket =
       Socket.of_fd
         (Fd.create (Fd.Kind.Socket `Passive) s
@@ -187,7 +187,7 @@ let run listener : never_returns =
   (* The main process may have already done some async stuff that created the async
      scheduler.  So, we reset async at the start of the master.  This puts async in
      a pristine state at the start of each worker that the master forks. *)
-  Async.Std.Scheduler.reset_in_forked_process ();
+  Async.Scheduler.reset_in_forked_process ();
   (* We put a pipe (that we've created) into every call to select. This allows us to wake
      up select whenever we want by writing to the pipe. This is the buffer that holds the
      wakeup events. It's 50 bytes long, because we write a wakeup event for every time we
@@ -386,7 +386,7 @@ module Worker_machines = struct
   (* All hail the great designers of the unix shell and operating system. *)
   let cmd bin_name cwd local_name =
     let async_config_set_var =
-      let var = Async.Std.Async_config.environment_variable in
+      let var = Async.Async_config.environment_variable in
       match Sys.getenv var with
       | None -> ""
       | Some value -> sprintf "%s=%S" var value
@@ -508,7 +508,7 @@ let init ?cluster ?(close_stdout_and_stderr = false) () =
 ;;
 
 (* Code below here does not run in the master process, and so can use async. *)
-open Async.Std
+open Async
 
 type host = {
   q: (Update.t, string) Result.t Ivar.t Queue.t;
