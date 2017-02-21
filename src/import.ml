@@ -7,7 +7,7 @@ module Socket_file : sig
   include Stringable with type t := t
 end = String
 
-module Debug = Async_kernel.Debug
+module Debug = Async_kernel.Async_kernel_private.Debug
 
 let debug = Debug.parallel
 
