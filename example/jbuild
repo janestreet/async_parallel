@@ -3,3 +3,5 @@
   (libraries (async
               async_parallel_deprecated
               core))))
+
+(jbuild_version jane_street)

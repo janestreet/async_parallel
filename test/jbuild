@@ -9,3 +9,5 @@
               async_parallel_deprecated
               core
               qtest_lib))))
+
+(jbuild_version jane_street)
