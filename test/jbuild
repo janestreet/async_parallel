@@ -1,7 +1,7 @@
 (alias
  ((name runtest)
   (deps (qtest.exe test_remote.exe))
-  (action "./qtest.exe")))
+  (action (bash "./qtest.exe"))))
 
 (executables
  ((names (qtest test_remote))
