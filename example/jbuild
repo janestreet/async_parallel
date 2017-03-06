@@ -3,6 +3,6 @@
   (libraries (async
               async_parallel_deprecated
               core))
-  (preprocess (pps (ppx_jane)))))
+  (preprocess (pps (ppx_jane ppx_driver.runner)))))
 
 (jbuild_version jane_street)
