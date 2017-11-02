@@ -70,13 +70,13 @@ let write c update =
 
 let read =
   assert (Marshal.header_size < 4096);
-  let buf = ref (String.create 4096) in
+  let buf = ref (Bytes.create 4096) in
   fun c ->
     really_io (U.read ~restart:false) c !buf ~pos:0 ~len:Marshal.header_size;
     let len = Marshal.data_size !buf 0 in
     if len + Marshal.header_size > String.length !buf then begin
-      let new_buf = String.create (len + Marshal.header_size) in
-      String.blit
+      let new_buf = Bytes.create (len + Marshal.header_size) in
+      Bytes.blit
         ~src:!buf ~dst:new_buf ~src_pos:0
         ~dst_pos:0 ~len:Marshal.header_size;
       buf := new_buf
@@ -195,7 +195,7 @@ let run listener : never_returns =
   (* These settings will cause us to shrink the heap to nearly the actual live data size
      when we compact. The smaller the heap the faster fork runs *)
   let wakeup_len = 50 in
-  let wakeup_buf = String.create wakeup_len in
+  let wakeup_buf = Bytes.create wakeup_len in
   let (wakeup_r, wakeup_w) = U.pipe () in
   let select_interrupted = ref false in
   let children = Pid.Hash_set.create () in
