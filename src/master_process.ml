@@ -51,8 +51,8 @@ let listener () =
 ;;
 
 let really_io
-    (th : ?pos:int -> ?len:int -> File_descr.t -> buf:string -> int)
-    fd buf =
+    (th : ?pos:int -> ?len:int -> File_descr.t -> buf:'a -> int)
+    fd (buf : 'a) =
   let rec loop ~pos ~len =
     match syscall (fun () -> th fd ~buf ~pos ~len) with
     | 0 -> raise End_of_file
@@ -65,7 +65,7 @@ let really_io
 
 let write c update =
   let s = Marshal.to_string update [] in
-  really_io (U.single_write ~restart:false) c s ~len:(String.length s) ~pos:0
+  really_io (U.single_write_substring ~restart:false) c s ~len:(String.length s) ~pos:0
 ;;
 
 let read =
@@ -74,7 +74,7 @@ let read =
   fun c ->
     really_io (U.read ~restart:false) c !buf ~pos:0 ~len:Marshal.header_size;
     let len = Marshal.data_size !buf 0 in
-    if len + Marshal.header_size > String.length !buf then begin
+    if len + Marshal.header_size > Bytes.length !buf then begin
       let new_buf = Bytes.create (len + Marshal.header_size) in
       Bytes.blit
         ~src:!buf ~dst:new_buf ~src_pos:0
@@ -82,7 +82,7 @@ let read =
       buf := new_buf
     end;
     really_io (U.read ~restart:false) c !buf ~pos:Marshal.header_size ~len;
-    Marshal.from_string !buf 0
+    Marshal.from_bytes !buf 0
 ;;
 
 module Signals = struct
@@ -176,7 +176,7 @@ let ping_master_machine () =
 
 let transfer_to close in_fd out_fd =
   try
-    let buf = String.make 512 '\000' in
+    let buf = Bytes.make 512 '\000' in
     let len = syscall (fun () -> U.read in_fd ~buf ~len:512 ~pos:0) in
     if len = 0 then close ()
     else really_io (U.single_write ~restart:false) out_fd buf ~len ~pos:0
@@ -425,7 +425,7 @@ ASYNC_PARALLEL_IS_CHILD_MACHINE=\"%s\" \\
             ~args:(ssh_options @ [machine; cmd (Filename.basename our_binary) our_cwd machine])
         in
         try
-          really_io (U.single_write ~restart:false) p.P.stdin us
+          really_io (U.single_write_substring ~restart:false) p.P.stdin us
             ~len:(String.length us) ~pos:0;
           U.close p.P.stdin;
           let ic = U.in_channel_of_descr p.P.stdout in

@@ -1,5 +1,6 @@
 (executables
  ((names (echo_server ring simple pingpong wide deep log))
+(flags (:standard -safe-string))
   (libraries (async
               async_parallel_deprecated
               core))

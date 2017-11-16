@@ -1,6 +1,7 @@
 (library
  ((name async_parallel_deprecated)
   (public_name async_parallel)
+  (flags (:standard -safe-string))
   (libraries (async
               core
               sexplib))

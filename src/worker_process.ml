@@ -35,7 +35,7 @@ let go (type a) (type b) (type c) ~control_socket =
         Shutdown.shutdown 2
       | `Ok x ->
         if debug then dbp "worker process read request";
-        match (Marshal.from_string x 0 : (a, b, c) To_worker.t) with
+        match (Marshal.from_bytes x 0 : (a, b, c) To_worker.t) with
         | To_worker.Run (buffer_age_limit, f) ->
           if debug then dbp "got run request, creating hub";
           Hub.create ?buffer_age_limit control_socket
