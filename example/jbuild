@@ -4,7 +4,7 @@
   (libraries (async
               async_parallel_deprecated
               core))
-  (preprocess (pps (ppx_jane ppx_driver.runner)))))
+  (preprocess (pps (ppx_jane ppxlib.runner)))))
 
 
 (jbuild_version 1)
