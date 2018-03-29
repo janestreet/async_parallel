@@ -5,7 +5,6 @@
 
 (executables
  ((names (qtest test_remote))
-(flags (:standard -safe-string))
   (libraries (async
               async_parallel_deprecated
               core
