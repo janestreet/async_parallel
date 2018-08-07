@@ -601,7 +601,7 @@ let create_process ?(where = `Local) () =
   connected_host (choose_machine where) (fun (h, w) ->
     Deferred.create (fun i ->
       Queue.enqueue h.q i;
-      Writer.write_marshal w ~flags:[] Request.Create_worker_process;
+      write_marshal w ~flags:[] Request.Create_worker_process;
       listen h))
   >>| function
   | Error e -> Error (Error.of_string e)
@@ -612,7 +612,7 @@ let create_process ?(where = `Local) () =
 let shutdown () =
   if debug then dbp "Master_process.shutdown called";
   connected_host (Option.value_exn !local_name) (fun (h, w) ->
-    Writer.write_marshal w ~flags:[] Request.Shutdown;
+    write_marshal w ~flags:[] Request.Shutdown;
     Writer.flushed w
     >>| fun () ->
     kill h;

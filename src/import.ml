@@ -50,3 +50,14 @@ let socket_connect_inet socket (addr, port) =
     else addr
   in
   Async.Socket.connect socket (`Inet (addr, port))
+
+include (struct
+  let write_marshal writer ~flags v =
+    Async.Writer.schedule_iovec writer
+      (Unix.IOVec.of_bigstring (Bigstring_marshal.marshal ~flags v))
+      ~destroy_or_keep:Destroy
+  ;;
+end : sig
+  (** [write_marshal] serializes data using [marshal] and writes it to the writer. *)
+  val write_marshal : Async.Writer.t -> flags : Marshal.extern_flags list -> _ -> unit
+end)

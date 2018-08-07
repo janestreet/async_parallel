@@ -51,7 +51,7 @@ let go (type a) (type b) (type c) ~control_socket =
              From_worker.Result r))
           >>> fun res ->
           if debug then dbp "writing result";
-          Writer.write_marshal ~flags:[Marshal.Closures] owner_writer
+          write_marshal ~flags:[Marshal.Closures] owner_writer
             (res : c From_worker.t);
           Writer.flushed owner_writer
           >>> fun _ ->

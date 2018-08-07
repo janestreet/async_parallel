@@ -166,7 +166,7 @@ let send t id a =
   match Hashtbl.find t.clients id with
   | None -> ()
   | Some conn ->
-    Writer.write_marshal conn.writer ~flags:[Marshal.Closures] a
+    write_marshal conn.writer ~flags:[Marshal.Closures] a
 ;;
 
 let send_to_all t a =
